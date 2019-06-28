@@ -4,6 +4,7 @@ import androidx.leanback.media.PlaybackGlueHost
 import androidx.leanback.media.PlayerAdapter
 import uk.co.bbc.smpan.SMP
 import uk.co.bbc.smpan.SMPObservable
+import uk.co.bbc.smpan.playercontroller.media.MediaPosition
 import uk.co.bbc.smpan.playercontroller.media.MediaProgress
 
 class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerState.Playing {
@@ -14,10 +15,12 @@ class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerSt
     override fun playing() {
         inPlaying = true
         hasPrepared = true
+        callback?.onPlayStateChanged(this)
     }
 
     override fun leavingPlaying() {
-        inPlaying = false;
+        inPlaying = false
+        callback?.onPlayStateChanged(this)
     }
 
     private var mediaProgress: MediaProgress? = null
@@ -25,7 +28,9 @@ class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerSt
     init {
         smp.addProgressListener {
             mediaProgress = it
-            //callback.onCurrentPositionChanged(this)
+            callback?.onCurrentPositionChanged(this)
+            callback?.onDurationChanged(this)
+
         }
         smp.addPlayingListener(this)
     }
@@ -53,5 +58,7 @@ class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerSt
         return hasPrepared
     }
 
-
+    override fun seekTo(positionInMs: Long) {
+        smp.seekTo(MediaPosition.fromMilliseconds(positionInMs))
+    }
 }

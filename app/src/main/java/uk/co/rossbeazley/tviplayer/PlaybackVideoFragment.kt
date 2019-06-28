@@ -27,12 +27,7 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
         val root = inflater.inflate(R.layout.video, container, false)
         val placeholder = root.findViewById<FrameLayout>(R.id.placeholder)
 
-
         val stats = object : AVStatisticsProvider {}
-
-
-//            val prb = VODPlayRequestBuilder(it, UserAgentStringBuilder()).forVpid ("m00063n1")
-//            prb!!.withAutoplay(true)
 
         val pr = PlayRequest.create(
             MediaContentVpid(episode.vpid, UserAgent("", ""), "mobile-phone-main"),
@@ -44,7 +39,6 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
 
         smp.load(pr.build())
         smp.createMediaLayer().attachToViewGroup(placeholder)
-
 
         return root
     }
@@ -72,15 +66,7 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
         val playbackSupportFragmentGlueHost = PlaybackSupportFragmentGlueHost(this)
         playbackSupportFragmentGlueHost.showControlsOverlay(true)
         playerGlue.host = playbackSupportFragmentGlueHost
-
-//        playerGlue.addPlayerCallback(object : PlaybackGlue.PlayerCallback() {
-//            override fun onPreparedStateChanged(glue: PlaybackGlue) {
-//                if (glue.isPrepared) {
-//                    playerGlue.setSeekProvider(MySeekProvider())
-//                    playerGlue.play()
-//                }
-//            }
-//        })
+        playerGlue.isSeekEnabled = true
         playerGlue.subtitle = episode.subtitle
         playerGlue.title = episode.title
     }
