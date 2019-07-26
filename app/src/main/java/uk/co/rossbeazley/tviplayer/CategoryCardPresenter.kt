@@ -20,6 +20,8 @@ import androidx.leanback.widget.Presenter
 import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.ViewGroup
+import androidx.leanback.widget.BaseCardView.CARD_REGION_VISIBLE_ALWAYS
+import androidx.leanback.widget.BaseCardView.CARD_TYPE_MAIN_ONLY
 
 import com.bumptech.glide.Glide
 import kotlin.properties.Delegates
@@ -42,7 +44,8 @@ class CategoryCardPresenter : Presenter() {
                 super.setSelected(selected)
             }
         }
-
+        //cardView.cardType = CARD_REGION_VISIBLE_ALWAYS
+        cardView.infoVisibility = CARD_REGION_VISIBLE_ALWAYS
         cardView.isFocusable = true
         cardView.isFocusableInTouchMode = true
         updateCardBackgroundColor(cardView, false)

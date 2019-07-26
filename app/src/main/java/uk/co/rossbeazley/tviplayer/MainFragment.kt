@@ -102,6 +102,7 @@ class MainFragment : BrowseFragment() {
     private fun loadRows() {
         val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         rowsAdapter.add(categories())
+        //rowsAdapter.add(liveChannels())
         adapter = rowsAdapter
     }
 
