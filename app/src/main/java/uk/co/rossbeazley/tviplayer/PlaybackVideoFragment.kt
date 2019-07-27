@@ -39,7 +39,7 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
 
         smp.load(pr.build())
         smp.createMediaLayer().attachToViewGroup(placeholder)
-
+        smp.addEndedListener { activity?.finish() }
         return root
     }
 

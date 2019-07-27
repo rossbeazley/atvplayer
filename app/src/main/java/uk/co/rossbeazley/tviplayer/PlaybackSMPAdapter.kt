@@ -33,6 +33,7 @@ class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerSt
 
         }
         smp.addPlayingListener(this)
+        smp.addEndedListener { callback?.onPlayCompleted(this) }
     }
     override fun pause() {
         smp.pause()
