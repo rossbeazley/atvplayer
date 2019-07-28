@@ -15,36 +15,17 @@
 package uk.co.rossbeazley.tviplayer
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 
 /**
  * Loads [MainFragment].
  */
-class GridActivity : Activity() {
+class NavigationActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_grid)
+        setContentView(R.layout.activity_main_navigation)
     }
-}
 
 
-fun Activity.navigateToPlayback(item: Episode) {
-    val intent = Intent(this, PlaybackActivity::class.java)
-    intent.putExtra(MainActivity.ITEM, item)
-
-    startActivity(intent)
-
-
-//        val playbackVideoFragment = PlaybackVideoFragment()
-//        val serializableExtra = intent.getSerializableExtra(MainActivity.ITEM)
-//        val bundle = Bundle()
-//        bundle.putSerializable(MainActivity.ITEM, serializableExtra)
-//        playbackVideoFragment.arguments = bundle
-//        this.fragmentManager.beginTransaction()
-//            .replace(android.R.id.content, playbackVideoFragment)
-//            .commit()
 }

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/nav_graph">
+            android:id="@+id/nav_graph" app:startDestination="@id/mainFragment">
 
+    <fragment android:id="@+id/playbackVideoFragment" android:name="uk.co.rossbeazley.tviplayer.PlaybackVideoFragment"
+              android:label="PlaybackVideoFragment"/>
+
+    <fragment android:id="@+id/gridFragment" android:name="uk.co.rossbeazley.tviplayer.GridFragment"
+              android:label="GridFragment"/>
+
+    <fragment android:id="@+id/mainFragment" android:name="uk.co.rossbeazley.tviplayer.MainFragment"
+              android:label="MainFragment"/>
 </navigation>

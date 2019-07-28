@@ -30,7 +30,7 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
         val stats = object : AVStatisticsProvider {}
 
         val pr = PlayRequest.create(
-            MediaContentVpid(episode.vpid, UserAgent("", ""), "mobile-phone-main"),
+            MediaContentVpid(episode.vpid, UserAgent("beazleysAndroidTVApp", "1.0"), "pc"),
             MediaMetadata.MediaType.ONDEMAND,
             MediaMetadata.MediaAvType.VIDEO,
             stats

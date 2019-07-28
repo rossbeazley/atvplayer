@@ -1,5 +1,6 @@
 package uk.co.rossbeazley.tviplayer
 
+import android.app.Activity
 import java.util.Timer
 import java.util.TimerTask
 
@@ -136,14 +137,12 @@ class GridFragment : BrowseFragment() {
 
             if (item is Episode) {
 
-                val intent = Intent(activity, PlaybackActivity::class.java)
-                intent.putExtra(MainActivity.ITEM, item)
-
-                activity.startActivity(intent)
+                activity.navigateToPlayback(item)
             }
 
         }
     }
+
 
     private inner class ItemViewSelectedListener : OnItemViewSelectedListener {
         override fun onItemSelected(
@@ -200,3 +199,4 @@ class GridFragment : BrowseFragment() {
         private val NUM_COLS = 15
     }
 }
+
