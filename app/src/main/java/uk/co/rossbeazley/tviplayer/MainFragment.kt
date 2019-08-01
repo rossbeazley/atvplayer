@@ -35,6 +35,9 @@ import androidx.leanback.widget.RowPresenter
 import androidx.core.content.ContextCompat
 import android.util.DisplayMetrics
 import android.util.Log
+import androidx.leanback.app.BrowseSupportFragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
@@ -49,7 +52,7 @@ import uk.co.rossbeazley.tviplayer.MainActivity.Companion.ITEM
  *
  * https://ibl.api.bbci.co.uk/ibl/v1/categories/
  */
-class MainFragment : BrowseFragment() {
+class MainFragment : BrowseSupportFragment() {
 
 
     private val mHandler = Handler()
@@ -81,10 +84,10 @@ class MainFragment : BrowseFragment() {
     private fun prepareBackgroundManager() {
 
         mBackgroundManager = BackgroundManager.getInstance(activity)
-        mBackgroundManager.attach(activity.window)
-        mDefaultBackground = ContextCompat.getDrawable(activity, R.drawable.default_background)
+        if(! mBackgroundManager.isAttached)    mBackgroundManager.attach(activity?.window)
+        mDefaultBackground = ContextCompat.getDrawable(activity!!, R.drawable.default_background)
         mMetrics = DisplayMetrics()
-        activity.windowManager.defaultDisplay.getMetrics(mMetrics)
+        activity!!.windowManager.defaultDisplay.getMetrics(mMetrics)
     }
 
     private fun setupUIElements() {
@@ -94,9 +97,9 @@ class MainFragment : BrowseFragment() {
         isHeadersTransitionOnBackEnabled = true
 
         // set fastLane (or headers) background color
-        brandColor = ContextCompat.getColor(activity, R.color.fastlane_background)
+        brandColor = ContextCompat.getColor(activity!!, R.color.fastlane_background)
         // set search icon color
-        searchAffordanceColor = ContextCompat.getColor(activity, R.color.search_opaque)
+        searchAffordanceColor = ContextCompat.getColor(activity!!, R.color.search_opaque)
     }
 
     private fun loadRows() {
@@ -109,7 +112,7 @@ class MainFragment : BrowseFragment() {
     private fun categories(): ListRow {
         val cardPresenter = CategoryCardPresenter()
         val listRowAdapter = ArrayObjectAdapter(cardPresenter)
-        CategoriesRepository(activity).programs {
+        CategoriesRepository(activity!!).programs {
             listRowAdapter.addAll(0, it)
         }
         val header = HeaderItem(0, "Categories")
@@ -132,9 +135,15 @@ class MainFragment : BrowseFragment() {
 
             if (item is Category) {
                 Log.d(TAG, "Item: " + item.toString())
-                val intent = Intent(activity, GridActivity::class.java)
-                intent.putExtra(ITEM, item)
-                activity.startActivity(intent)
+//                val intent = Intent(activity, GridActivity::class.java)
+//                intent.putExtra(ITEM, item)
+//                activity!!.startActivity(intent)
+
+                val itemBundle = Bundle()
+                itemBundle.putSerializable(ITEM, item)
+
+                Navigation.findNavController(itemViewHolder.view)
+                    .navigate(R.id.action_mainFragment_to_gridFragment, itemBundle)
             }
 
         }

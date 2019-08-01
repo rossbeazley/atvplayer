@@ -7,8 +7,13 @@
               android:label="PlaybackVideoFragment"/>
 
     <fragment android:id="@+id/gridFragment" android:name="uk.co.rossbeazley.tviplayer.GridFragment"
-              android:label="GridFragment"/>
+              android:label="GridFragment">
+        <action android:id="@+id/action_gridFragment_to_playbackVideoFragment"
+                app:destination="@id/playbackVideoFragment"/>
+    </fragment>
 
     <fragment android:id="@+id/mainFragment" android:name="uk.co.rossbeazley.tviplayer.MainFragment"
-              android:label="MainFragment"/>
+              android:label="MainFragment">
+        <action android:id="@+id/action_mainFragment_to_gridFragment" app:destination="@id/gridFragment"/>
+    </fragment>
 </navigation>

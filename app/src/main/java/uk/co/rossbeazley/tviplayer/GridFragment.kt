@@ -14,7 +14,9 @@ import androidx.core.content.ContextCompat
 import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Toast
+import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
+import androidx.navigation.Navigation
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
@@ -28,7 +30,7 @@ import com.bumptech.glide.request.target.SimpleTarget
  *
  * https://ibl.api.bbci.co.uk/ibl/v1/categories/
  */
-class GridFragment : BrowseFragment() {
+class GridFragment : BrowseSupportFragment() {
 
     private val mHandler = Handler()
     private lateinit var mBackgroundManager: BackgroundManager
@@ -41,10 +43,11 @@ class GridFragment : BrowseFragment() {
         Log.i(TAG, "onCreate")
         super.onActivityCreated(savedInstanceState)
 
-        category = activity.intent.getSerializableExtra(MainActivity.ITEM) as Category
+        //category = activity!!.intent.getSerializableExtra(MainActivity.ITEM) as Category
+        category = arguments?.getSerializable(MainActivity.ITEM) as Category
 
-        programsRepository = ProgramsRepository(activity)
-        episodesRepository = EpisodesRepository(activity)
+        programsRepository = ProgramsRepository(activity!!)
+        episodesRepository = EpisodesRepository(activity!!)
 
         prepareBackgroundManager()
 
@@ -64,10 +67,14 @@ class GridFragment : BrowseFragment() {
     private fun prepareBackgroundManager() {
 
         mBackgroundManager = BackgroundManager.getInstance(activity)
-        mBackgroundManager.attach(activity.window)
-        mDefaultBackground = ContextCompat.getDrawable(activity, R.drawable.default_background)
+        if(mBackgroundManager.isAttached) {
+
+        } else {
+            mBackgroundManager.attach(activity!!.window)
+        }
+        mDefaultBackground = ContextCompat.getDrawable(activity!!, R.drawable.default_background)
         mMetrics = DisplayMetrics()
-        activity.windowManager.defaultDisplay.getMetrics(mMetrics)
+        activity!!.windowManager.defaultDisplay.getMetrics(mMetrics)
     }
 
     private fun setupUIElements() {
@@ -77,9 +84,9 @@ class GridFragment : BrowseFragment() {
         isHeadersTransitionOnBackEnabled = true
 
         // set fastLane (or headers) background color
-        brandColor = ContextCompat.getColor(activity, R.color.fastlane_background)
+        brandColor = ContextCompat.getColor(activity!!, R.color.fastlane_background)
         // set search icon color
-        searchAffordanceColor = ContextCompat.getColor(activity, R.color.search_opaque)
+        searchAffordanceColor = ContextCompat.getColor(activity!!, R.color.search_opaque)
     }
 
     private lateinit var category: Category
@@ -137,7 +144,10 @@ class GridFragment : BrowseFragment() {
 
             if (item is Episode) {
 
-                activity.navigateToPlayback(item)
+                val itemBundle = Bundle()
+                itemBundle.putSerializable(MainActivity.ITEM,item)
+
+                Navigation.findNavController(itemViewHolder.view).navigate(R.id.action_gridFragment_to_playbackVideoFragment,itemBundle)
             }
 
         }
