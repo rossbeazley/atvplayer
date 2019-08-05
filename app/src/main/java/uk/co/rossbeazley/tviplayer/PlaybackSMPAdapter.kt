@@ -1,20 +1,34 @@
 package uk.co.rossbeazley.tviplayer
 
-import androidx.leanback.media.PlaybackGlueHost
 import androidx.leanback.media.PlayerAdapter
 import uk.co.bbc.smpan.SMP
 import uk.co.bbc.smpan.SMPObservable
+import uk.co.bbc.smpan.media.errors.SMPError
 import uk.co.bbc.smpan.playercontroller.media.MediaPosition
 import uk.co.bbc.smpan.playercontroller.media.MediaProgress
 
-class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerState.Playing {
+class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerState.Playing,
+                                                          SMPObservable.PlayerState.Loading
+
+{
+
+    override fun leavingLoading() {
+        callback?.onBufferingStateChanged(this, false)
+    }
+
+    override fun loading() {
+        callback?.onBufferingStateChanged(this, true)
+    }
 
     var inPlaying = false
     var hasPrepared = false
 
     override fun playing() {
         inPlaying = true
-        hasPrepared = true
+        if(!hasPrepared) {
+            hasPrepared = true
+            callback?.onPreparedStateChanged(this)
+        }
         callback?.onPlayStateChanged(this)
     }
 
@@ -33,6 +47,15 @@ class PlaybackSMPAdapter(val smp: SMP) : PlayerAdapter(), SMPObservable.PlayerSt
 
         }
         smp.addPlayingListener(this)
+        smp.addErrorStateListener( object : SMPObservable.PlayerState.Error {
+            override fun leavingError() {
+
+            }
+
+            override fun error(p0: SMPError?) {
+                callback?.onError(this@PlaybackSMPAdapter, 0, p0?.message())
+            }
+        })
         smp.addEndedListener { callback?.onPlayCompleted(this) }
     }
     override fun pause() {

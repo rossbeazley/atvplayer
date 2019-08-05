@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.leanback.app.PlaybackSupportFragment
 import androidx.leanback.app.PlaybackSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackTransportControlGlue
+import androidx.navigation.Navigation
 import uk.co.bbc.httpclient.useragent.UserAgent
 import uk.co.bbc.smpan.SMP
 import uk.co.bbc.smpan.SMPBuilder
@@ -30,7 +31,7 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
         val stats = object : AVStatisticsProvider {}
 
         val pr = PlayRequest.create(
-            MediaContentVpid(episode.vpid, UserAgent("beazleysAndroidTVApp", "1.0"), "pc"),
+            MediaContentVpid(episode.vpid, UserAgent("beazleysAndroidTVApp", "1.0"), "iptv-all"),
             MediaMetadata.MediaType.ONDEMAND,
             MediaMetadata.MediaAvType.VIDEO,
             stats
@@ -39,7 +40,9 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
 
         smp.load(pr.build())
         smp.createMediaLayer().attachToViewGroup(placeholder)
-        smp.addEndedListener { activity?.finish() }
+        smp.addEndedListener {
+            Navigation.findNavController(container!!).popBackStack()
+        }
         return root
     }
 

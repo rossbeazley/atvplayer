@@ -43,7 +43,6 @@ class GridFragment : BrowseSupportFragment() {
         Log.i(TAG, "onCreate")
         super.onActivityCreated(savedInstanceState)
 
-        //category = activity!!.intent.getSerializableExtra(MainActivity.ITEM) as Category
         category = arguments?.getSerializable(MainActivity.ITEM) as Category
 
         programsRepository = ProgramsRepository(activity!!)
