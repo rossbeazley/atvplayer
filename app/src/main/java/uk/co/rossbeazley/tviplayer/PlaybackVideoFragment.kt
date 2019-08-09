@@ -61,7 +61,7 @@ class PlaybackVideoFragment : PlaybackSupportFragment() {
 
         episode = arguments?.getSerializable(MainActivity.ITEM) as Episode
 
-        smp = SMPBuilder.create(context, UserAgent("", ""), UserInteractionStatisticsProvider.NULL).build()
+        smp = SMPBuilder.create(context, UserAgent("beazleysAndroidTVApp", "1.0"), UserInteractionStatisticsProvider.NULL).build()
         val playerGlue = PlaybackTransportControlGlue(
             activity,
             PlaybackSMPAdapter(smp)
